@@ -1,40 +1,32 @@
-# 맥용 설정
+# macOS 전용 설정
 import os
 import sys
-from pathlib import Path
+
+# macOS GUI 환경 강제 설정
+if sys.platform == "darwin":
+    os.environ['TK_SILENCE_DEPRECATION'] = '1'
+    # GUI 모드 강제 설정
+    if 'DISPLAY' not in os.environ:
+        os.environ['DISPLAY'] = ':0'
 
 # 맥용 폰트 설정
-FONT_REGULAR = ("AppleGothic", 13)
-FONT_BOLD = ("AppleGothic", 13, "bold")
-FONT_TITLE = ("AppleGothic", 13, "bold")
-FONT_SMALL = ("AppleGothic", 11)
+FONT_FAMILY = "SF Pro Display"  # macOS 시스템 폰트
+FONT_SIZE = 12
 
-# 데이터 파일 경로 (맥용)
-DATA_DIR = str(Path.home() / "Library" / "Application Support" / "CleaningAssign")
-os.makedirs(DATA_DIR, exist_ok=True)
-
-# 메인 앱 코드 import 전에 설정 적용
-import CleaningAssign
-
-# 플랫폼별 설정 적용
-CleaningAssign.FONT_REGULAR = FONT_REGULAR
-CleaningAssign.FONT_BOLD = FONT_BOLD
-CleaningAssign.FONT_TITLE = FONT_TITLE
-CleaningAssign.FONT_SMALL = FONT_SMALL
-CleaningAssign.DATA_DIR = DATA_DIR
-
-# 데이터 파일 경로 업데이트
-CleaningAssign.ZONES_FILE = os.path.join(DATA_DIR, 'zones.json')
-CleaningAssign.NAMES_FILE = os.path.join(DATA_DIR, 'names.json')
-CleaningAssign.SETTINGS_DIR = os.path.join(DATA_DIR, 'settings')
-CleaningAssign.EXCLUSION_FILE = os.path.join(DATA_DIR, 'exclusions.json')
-os.makedirs(CleaningAssign.SETTINGS_DIR, exist_ok=True)
-
-# 앱 실행
+# 메인 앱 import 및 실행
 if __name__ == "__main__":
-    # 배정 제외 설정 로드
-    CleaningAssign.load_exclusions()
+    # 현재 디렉터리를 실행 파일 위치로 변경
+    if hasattr(sys, '_MEIPASS'):
+        os.chdir(sys._MEIPASS)
     
-    # 앱 시작
-    app = CleaningAssign.CleaningAssignApp()
-    app.mainloop() 
+    from CleaningAssign import CleaningAssignApp
+    
+    try:
+        app = CleaningAssignApp()
+        app.mainloop()
+    except Exception as e:
+        # GUI 실패시 터미널에 오류 메시지 출력
+        print(f"GUI 실행 중 오류가 발생했습니다: {e}")
+        print("터미널에서 다음 명령어로 다시 시도해보세요:")
+        print("export DISPLAY=:0 && ./CleaningAssign_mac &")
+        input("아무 키나 누르면 종료됩니다...") 
