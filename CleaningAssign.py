@@ -265,6 +265,121 @@ class ExclusionDialog(ctk.CTkToplevel):
     def cancel_clicked(self):
         self.destroy()
 
+class ExclusionDeleteDialog(ctk.CTkToplevel):
+    def __init__(self, parent, exclusion_settings):
+        super().__init__(parent)
+        self.result = None
+        self.exclusion_settings = exclusion_settings
+        
+        # 창 설정
+        self.title("제한사항 삭제")
+        self.geometry("600x500")
+        self.resizable(False, False)
+        
+        # 모달 설정
+        self.transient(parent)
+        self.grab_set()
+        
+        # 메인 프레임
+        main_frame = ctk.CTkFrame(self)
+        main_frame.pack(fill="both", expand=True, padx=20, pady=20)
+        
+        # 제목
+        ctk.CTkLabel(main_frame, text="삭제할 제한사항을 선택하세요:", font=FONT_BOLD).pack(pady=(0, 15))
+        
+        # 스크롤 프레임
+        scroll_frame = ctk.CTkScrollableFrame(main_frame, height=300)
+        scroll_frame.pack(fill="both", expand=True, pady=(0, 15))
+        
+        self.checkboxes = []
+        
+        # 구역 배정 제외 설정 표시
+        if exclusion_settings["zone_exclusions"]:
+            ctk.CTkLabel(scroll_frame, text="구역 배정 제외:", font=FONT_BOLD, anchor="w").pack(fill="x", pady=(5, 5))
+            
+            for name, zones in exclusion_settings["zone_exclusions"].items():
+                if zones:
+                    text = f"{name} → 제외구역: {', '.join(zones)}"
+                    var = tk.BooleanVar()
+                    checkbox = ctk.CTkCheckBox(scroll_frame, text=text, variable=var, font=FONT_REGULAR)
+                    checkbox.pack(fill="x", padx=20, pady=2)
+                    self.checkboxes.append(("zone", name, var))
+        
+        # 매칭 제한 설정 표시
+        if exclusion_settings["pair_exclusions"]:
+            ctk.CTkLabel(scroll_frame, text="매칭 제한:", font=FONT_BOLD, anchor="w").pack(fill="x", pady=(15, 5))
+            
+            for name, excluded_names in exclusion_settings["pair_exclusions"].items():
+                if excluded_names:
+                    text = f"{name} ↔ {', '.join(excluded_names)}"
+                    var = tk.BooleanVar()
+                    checkbox = ctk.CTkCheckBox(scroll_frame, text=text, variable=var, font=FONT_REGULAR)
+                    checkbox.pack(fill="x", padx=20, pady=2)
+                    self.checkboxes.append(("pair", name, var))
+        
+        # 버튼 프레임
+        btn_frame = ctk.CTkFrame(main_frame, fg_color="transparent")
+        btn_frame.pack(fill="x", pady=(15, 0))
+        
+        # 전체 선택/해제 버튼
+        select_all_btn = ctk.CTkButton(btn_frame, text="전체 선택", command=self.select_all, 
+                                     font=FONT_REGULAR, width=100, height=32)
+        select_all_btn.pack(side="left", padx=5)
+        
+        deselect_all_btn = ctk.CTkButton(btn_frame, text="전체 해제", command=self.deselect_all, 
+                                       font=FONT_REGULAR, width=100, height=32)
+        deselect_all_btn.pack(side="left", padx=5)
+        
+        # 삭제/취소 버튼
+        delete_btn = ctk.CTkButton(btn_frame, text="선택 삭제", command=self.delete_selected, 
+                                 font=FONT_REGULAR, width=100, height=32, 
+                                 fg_color="#dc3545", hover_color="#c82333")
+        delete_btn.pack(side="right", padx=5)
+        
+        cancel_btn = ctk.CTkButton(btn_frame, text="취소", command=self.cancel_clicked, 
+                                 font=FONT_REGULAR, width=100, height=32)
+        cancel_btn.pack(side="right", padx=5)
+    
+    def select_all(self):
+        """모든 항목 선택"""
+        for _, _, var in self.checkboxes:
+            var.set(True)
+    
+    def deselect_all(self):
+        """모든 항목 선택 해제"""
+        for _, _, var in self.checkboxes:
+            var.set(False)
+    
+    def delete_selected(self):
+        """선택된 항목들 삭제"""
+        deleted_items = []
+        
+        for setting_type, name, var in self.checkboxes:
+            if var.get():
+                if setting_type == "zone":
+                    if name in self.exclusion_settings["zone_exclusions"]:
+                        del self.exclusion_settings["zone_exclusions"][name]
+                        deleted_items.append(f"구역제외: {name}")
+                elif setting_type == "pair":
+                    if name in self.exclusion_settings["pair_exclusions"]:
+                        del self.exclusion_settings["pair_exclusions"][name]
+                        deleted_items.append(f"매칭제한: {name}")
+        
+        if not deleted_items:
+            messagebox.showwarning("경고", "삭제할 항목을 선택하세요.")
+            return
+        
+        # 확인 대화상자
+        confirm_msg = f"다음 {len(deleted_items)}개 설정을 삭제하시겠습니까?\n\n"
+        confirm_msg += "\n".join(deleted_items)
+        
+        if messagebox.askyesno("삭제 확인", confirm_msg):
+            self.result = deleted_items
+            self.destroy()
+    
+    def cancel_clicked(self):
+        self.destroy()
+
 class CleaningAssignApp(ctk.CTk):
     def __init__(self):
         super().__init__()
@@ -283,6 +398,7 @@ class CleaningAssignApp(ctk.CTk):
         self.bind('<F1>', self.toggle_zone_exclusion)  # F1: 구역 배정 제외
         self.bind('<F2>', self.toggle_pair_exclusion)  # F2: 페어 매칭 제한
         self.bind('<F3>', self.show_current_exclusions)  # F3: 현재 설정된 제한사항 보기
+        self.bind('<F4>', self.delete_exclusion_settings)  # F4: 설정 삭제
 
         self.create_widgets()
 
@@ -867,6 +983,21 @@ class CleaningAssignApp(ctk.CTk):
             message += "설정된 제한사항이 없습니다."
             
         messagebox.showinfo("제한사항 목록", message)
+
+    def delete_exclusion_settings(self, event=None):
+        """F1, F2로 설정한 제한사항 삭제"""
+        if not EXCLUSION_SETTINGS["zone_exclusions"] and not EXCLUSION_SETTINGS["pair_exclusions"]:
+            messagebox.showinfo("알림", "삭제할 설정이 없습니다.")
+            return
+        
+        dialog = ExclusionDeleteDialog(self, EXCLUSION_SETTINGS)
+        self.wait_window(dialog)
+        
+        if dialog.result:
+            deleted_items = dialog.result
+            if deleted_items:
+                save_exclusions()
+                messagebox.showinfo("완료", f"{len(deleted_items)}개의 설정이 삭제되었습니다.")
 
     def assign_and_send(self):
         zones = self.zone_assign_list.copy() if self.zone_assign_list else self.zones.copy()

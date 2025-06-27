@@ -12,42 +12,69 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-attachment: fixed;
             min-height: 100vh;
-            padding: 20px;
+            padding: 40px 20px;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            background: white;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.1),
+                0 1px 2px rgba(0, 0, 0, 0.05);
             overflow: hidden;
         }
 
         .header {
-            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
-            color: white;
-            padding: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: #1d1d1f;
+            padding: 40px 30px;
             text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
         }
 
         .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
+            font-size: 2.8em;
+            font-weight: 700;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #1d1d1f 0%, #4a4a4a 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            font-weight: 400;
+            color: #6e6e73;
+            margin: 0;
         }
 
         .content {
-            padding: 30px;
+            padding: 40px;
         }
 
         .input-section {
-            background: #f8f9fa;
-            padding: 25px;
-            border-radius: 15px;
-            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 32px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 
+                0 4px 16px rgba(0, 0, 0, 0.05),
+                0 1px 2px rgba(0, 0, 0, 0.02);
         }
 
         .input-group {
@@ -56,71 +83,111 @@
 
         label {
             display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: #333;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #1d1d1f;
+            font-size: 15px;
+            letter-spacing: -0.01em;
         }
 
         input, textarea, select {
             width: 100%;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 10px;
+            padding: 16px 20px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
             font-size: 16px;
-            transition: border-color 0.3s;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-weight: 400;
         }
 
         input:focus, textarea:focus, select:focus {
             outline: none;
-            border-color: #4CAF50;
+            border-color: #007aff;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 
+                0 0 0 4px rgba(0, 122, 255, 0.1),
+                0 4px 20px rgba(0, 122, 255, 0.1);
+            transform: translateY(-1px);
         }
 
         button {
-            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            background: linear-gradient(135deg, #007aff 0%, #5856d6 100%);
             color: white;
             border: none;
-            padding: 15px 30px;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: bold;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
-            margin: 5px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin: 6px;
+            letter-spacing: -0.01em;
+            box-shadow: 
+                0 4px 12px rgba(0, 122, 255, 0.2),
+                0 1px 2px rgba(0, 0, 0, 0.1);
         }
 
         button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 
+                0 8px 24px rgba(0, 122, 255, 0.3),
+                0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        button:active {
+            transform: translateY(-1px) scale(1.01);
+            transition: all 0.1s ease;
         }
 
         .results {
-            background: #fff;
-            border: 2px solid #e0e0e0;
-            border-radius: 15px;
-            padding: 25px;
-            margin-top: 30px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+            padding: 32px;
+            margin-top: 24px;
+            box-shadow: 
+                0 4px 16px rgba(0, 0, 0, 0.05),
+                0 1px 2px rgba(0, 0, 0, 0.02);
         }
 
         .assignment-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px;
-            margin: 10px 0;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            border-radius: 10px;
-            border-left: 5px solid #4CAF50;
+            padding: 20px 24px;
+            margin: 12px 0;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 12px;
+            border-left: 4px solid #007aff;
+            box-shadow: 
+                0 2px 8px rgba(0, 0, 0, 0.04),
+                0 1px 2px rgba(0, 0, 0, 0.02);
+            transition: all 0.2s ease;
+        }
+
+        .assignment-item:hover {
+            transform: translateY(-1px);
+            box-shadow: 
+                0 4px 16px rgba(0, 0, 0, 0.08),
+                0 2px 4px rgba(0, 0, 0, 0.04);
         }
 
         .person-name {
-            font-weight: bold;
-            color: #333;
-            font-size: 18px;
+            font-weight: 500;
+            color: #1d1d1f;
+            font-size: 16px;
         }
 
         .zone-name {
-            color: #666;
-            font-size: 16px;
+            color: #86868b;
+            font-size: 14px;
         }
 
         .controls {
@@ -137,15 +204,15 @@
         }
 
         .status.success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+            background: #d1f2db;
+            color: #0d6f23;
+            border: 1px solid #34c759;
         }
 
         .status.error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+            background: #fdeae8;
+            color: #d1242f;
+            border: 1px solid #ff3b30;
         }
 
         /* 모달 스타일 */
@@ -161,15 +228,21 @@
         }
 
         .modal-content {
-            background-color: white;
-            margin: 5% auto;
-            padding: 30px;
-            border-radius: 15px;
-            width: 80%;
-            max-width: 600px;
-            max-height: 80vh;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            margin: 3% auto;
+            padding: 32px;
+            border-radius: 20px;
+            width: 85%;
+            max-width: 480px;
+            max-height: 85vh;
             overflow-y: auto;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.2),
+                0 4px 16px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            position: relative;
         }
 
         .modal-header {
@@ -177,14 +250,14 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
-            border-bottom: 2px solid #e0e0e0;
-            padding-bottom: 15px;
+            border-bottom: 1px solid #e5e5e7;
+            padding-bottom: 16px;
         }
 
         .modal-title {
-            font-size: 1.5em;
-            font-weight: bold;
-            color: #333;
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #1d1d1f;
         }
 
         .close {
@@ -200,81 +273,137 @@
         }
 
         .modal-section {
-            margin: 20px 0;
+            margin: 15px 0;
         }
 
         .modal-section h3 {
-            margin-bottom: 10px;
-            color: #4CAF50;
-            font-size: 1.1em;
+            margin-bottom: 12px;
+            color: #007aff;
+            font-size: 1em;
+            font-weight: 600;
+        }
+
+        .modal-section select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #d2d2d7;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 12px;
+            background: #ffffff;
+        }
+
+        /* 모달 안의 체크박스와 라벨 정렬 */
+        .modal input[type="checkbox"] {
+            width: auto !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            margin-right: 8px !important;
         }
 
         .checkbox-list {
-            max-height: 200px;
+            max-height: 120px;
             overflow-y: auto;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            padding: 15px;
-            background: #f8f9fa;
+            border: 1px solid #d2d2d7;
+            border-radius: 8px;
+            padding: 8px;
+            background: #f5f5f7;
+            margin: 8px 0;
         }
 
         .checkbox-item {
             display: flex;
             align-items: center;
-            margin: 8px 0;
-            padding: 8px;
-            border-radius: 5px;
-            transition: background-color 0.2s;
+            margin: 4px 0;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            font-size: 14px;
         }
 
         .checkbox-item:hover {
-            background-color: #e9ecef;
+            background-color: #e5e5e7;
         }
 
         .checkbox-item input[type="checkbox"] {
-            margin-right: 10px;
-            transform: scale(1.2);
+            width: auto !important;
+            margin-right: 8px;
+            transform: scale(1.1);
+            flex-shrink: 0;
+        }
+
+        .checkbox-item label {
+            margin: 0;
+            cursor: pointer;
+            flex: 1;
         }
 
         .modal-buttons {
             display: flex;
             justify-content: space-between;
-            margin-top: 25px;
+            margin-top: 20px;
             gap: 10px;
         }
 
-        .current-settings {
-            background: #e8f5e8;
-            border: 1px solid #4CAF50;
-            border-radius: 8px;
-            padding: 15px;
-            margin: 15px 0;
+        .modal-buttons button {
+            flex: 1;
+            padding: 12px;
             font-size: 14px;
+        }
+
+        .current-settings {
+            background: #e3f2fd;
+            border: 1px solid #007aff;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 12px 0;
+            font-size: 13px;
+            line-height: 1.5;
+            color: #1d1d1f;
         }
 
         .shortcut-info {
             text-align: center;
-            margin: 15px 0;
-            padding: 10px;
-            background: #fff3cd;
-            border: 1px solid #ffeaa7;
+            margin: 16px 0;
+            padding: 12px;
+            background: #fff8e1;
+            border: 1px solid #ffb84d;
             border-radius: 8px;
             font-size: 14px;
-            color: #856404;
+            color: #b7410e;
         }
 
         @media (max-width: 768px) {
+            body {
+                padding: 20px 10px;
+            }
+            
             .container {
-                margin: 10px;
-                border-radius: 15px;
+                margin: 0;
+                border-radius: 16px;
             }
             
             .content {
-                padding: 20px;
+                padding: 24px;
+            }
+            
+            .input-section {
+                padding: 24px;
+                margin-bottom: 20px;
+            }
+            
+            .header {
+                padding: 30px 20px;
             }
             
             .header h1 {
-                font-size: 2em;
+                font-size: 2.2em;
+            }
+            
+            .modal-content {
+                padding: 24px;
+                border-radius: 16px;
+                width: 90%;
             }
         }
     </style>
@@ -290,12 +419,13 @@
             <div class="input-section">
                 <div class="input-group">
                     <label for="names">참여자 명단 (한 줄에 한 명씩)</label>
-                    <textarea id="names" rows="6" placeholder="김철수&#10;이영희&#10;박민수&#10;최지혜"></textarea>
+                    <textarea id="names" rows="6" placeholder="참여자 명단을 한 줄에 한 명씩 입력하세요"></textarea>
                 </div>
                 
                 <div class="input-group">
-                    <label for="zones">청소구역 (한 줄에 하나씩)</label>
-                    <textarea id="zones" rows="6" placeholder="1층 복도&#10;2층 복도&#10;화장실&#10;계단&#10;교실 1&#10;교실 2"></textarea>
+                    <label for="zones">청소구역 (구역명:인원수 형식, 한 줄에 하나씩)</label>
+                    <textarea id="zones" rows="6" placeholder="구역명:인원수 형식으로 한 줄에 하나씩 입력하세요"></textarea>
+                    <small style="color: #666; font-size: 12px;">예시: "화장실:2" (화장실에 2명 배정)</small>
                 </div>
                 
                 <div class="input-group">
@@ -304,20 +434,15 @@
                 </div>
             </div>
             
-            <div class="shortcut-info">
-                💡 <strong>단축키:</strong> F1 - 구역 배정 제외 설정 | F2 - 매칭 제한 설정 | F3 - 현재 설정 확인
+            <div class="input-group">
+                <label for="webhook">웹훅 URL (두레이)</label>
+                <input type="url" id="webhook" placeholder="https://your-webhook-url.com">
             </div>
             
             <div class="controls">
-                <button onclick="assignZones()">🎲 구역 배정하기</button>
-                <button onclick="saveData()">💾 데이터 저장</button>
-                <button onclick="loadData()">📂 데이터 불러오기</button>
-                <button onclick="openZoneExclusionModal()">🚫 구역 제외 설정 (F1)</button>
-                <button onclick="openPairExclusionModal()">👥 매칭 제한 설정 (F2)</button>
-                <button onclick="showCurrentExclusions()">📋 현재 설정 확인 (F3)</button>
-                <button onclick="exportResults()">📄 결과 내보내기</button>
-                <button onclick="exportAllData()">💾 전체 데이터 내보내기</button>
-                <button onclick="importData()">📁 데이터 가져오기</button>
+                <button onclick="assignAndSend()">🧹 배정하고 전송하기</button>
+                <button onclick="exportAllData()">💾 데이터 백업</button>
+                <button onclick="importData()">📁 데이터 복원</button>
                 <button onclick="clearAll()">🗑️ 전체 삭제</button>
                 <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="handleFileImport(event)">
             </div>
@@ -400,75 +525,214 @@
         </div>
     </div>
 
+    <!-- 설정 삭제 모달 -->
+    <div id="deleteExclusionModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">🗑️ 제한사항 삭제</h2>
+                <span class="close" onclick="closeModal('deleteExclusionModal')">&times;</span>
+            </div>
+            
+            <div class="modal-section">
+                <h3>삭제할 제한사항을 선택하세요</h3>
+                <div id="deleteExclusionList" class="checkbox-list" style="max-height: 250px;">
+                    <!-- 동적으로 생성됨 -->
+                </div>
+            </div>
+            
+            <div class="modal-buttons">
+                <button onclick="selectAllForDelete()">전체 선택</button>
+                <button onclick="deselectAllForDelete()">전체 해제</button>
+                <button onclick="deleteSelectedExclusions()" style="background: #dc3545; color: white;">선택 삭제</button>
+                <button onclick="closeModal('deleteExclusionModal')">❌ 취소</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // 데이터 저장/불러오기
-        function saveData() {
+        // 자동 데이터 저장/불러오기
+        function autoSaveData() {
             const data = {
                 names: document.getElementById('names').value,
                 zones: document.getElementById('zones').value,
-                exclusions: document.getElementById('exclusions').value
+                exclusions: document.getElementById('exclusions').value,
+                webhook: document.getElementById('webhook').value
             };
             localStorage.setItem('cleaningAssignData', JSON.stringify(data));
-            showStatus('데이터가 저장되었습니다!', 'success');
         }
 
-        function loadData() {
+        function autoLoadData() {
             const saved = localStorage.getItem('cleaningAssignData');
             if (saved) {
                 const data = JSON.parse(saved);
                 document.getElementById('names').value = data.names || '';
                 document.getElementById('zones').value = data.zones || '';
                 document.getElementById('exclusions').value = data.exclusions || '';
-                showStatus('데이터를 불러왔습니다!', 'success');
-            } else {
-                showStatus('저장된 데이터가 없습니다.', 'error');
+                document.getElementById('webhook').value = data.webhook || '';
             }
         }
 
-        // 구역 배정 함수
-        function assignZones() {
+
+
+        // 배정하고 웹훅으로 전송
+        async function assignAndSend() {
+            const webhookUrl = document.getElementById('webhook').value.trim();
+            
+            if (!webhookUrl) {
+                showStatus('웹훅 URL을 입력해주세요!', 'error');
+                return;
+            }
+
+            const assignments = performAssignment();
+            if (!assignments) return;
+
+            // 두레이 메시지 형식으로 구성
+            let message = '🧹 **W-DAY 청소구역 배정 결과**\n\n';
+            assignments.forEach(assignment => {
+                const peopleText = assignment.people.join(', ');
+                message += `⭐ ${assignment.zone}: ${peopleText}\n`;
+            });
+            message += '\n모두 수고해주세요! 🙏';
+
+            const payload = {
+                text: message
+            };
+
+            try {
+                const response = await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    displayResults(assignments);
+                    showStatus('배정 결과가 두레이로 전송되었습니다!', 'success');
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                showStatus(`전송 중 오류가 발생했습니다: ${error.message}`, 'error');
+            }
+        }
+
+        // 실제 배정 로직 (제외 설정 적용)
+        function performAssignment() {
             const namesText = document.getElementById('names').value.trim();
             const zonesText = document.getElementById('zones').value.trim();
             const exclusionsText = document.getElementById('exclusions').value.trim();
 
             if (!namesText || !zonesText) {
                 showStatus('참여자 명단과 청소구역을 모두 입력해주세요!', 'error');
-                return;
+                return null;
             }
 
             // 데이터 파싱
             let names = namesText.split('\n').filter(name => name.trim());
-            const zones = zonesText.split('\n').filter(zone => zone.trim());
+            const zoneLines = zonesText.split('\n').filter(line => line.trim());
             const exclusions = exclusionsText ? exclusionsText.split(',').map(name => name.trim()) : [];
+
+            // 구역과 인원수 파싱
+            const zones = [];
+            for (const line of zoneLines) {
+                const [zoneName, countStr] = line.split(':').map(s => s.trim());
+                const count = countStr ? parseInt(countStr) : 1;
+                if (zoneName) {
+                    zones.push({ name: zoneName, count: count });
+                }
+            }
 
             // 제외자 처리
             names = names.filter(name => !exclusions.includes(name.trim()));
 
             if (names.length === 0) {
                 showStatus('배정 가능한 참여자가 없습니다!', 'error');
-                return;
+                return null;
             }
 
             if (zones.length === 0) {
                 showStatus('청소구역을 입력해주세요!', 'error');
-                return;
+                return null;
             }
 
-            // 랜덤 배정
-            const shuffledNames = [...names].sort(() => Math.random() - 0.5);
-            const assignments = [];
-
-            for (let i = 0; i < zones.length; i++) {
-                const assignedPerson = shuffledNames[i % shuffledNames.length];
-                assignments.push({
-                    person: assignedPerson,
-                    zone: zones[i]
-                });
+            // 총 필요 인원 계산
+            const totalNeeded = zones.reduce((sum, zone) => sum + zone.count, 0);
+            
+            if (totalNeeded !== names.length) {
+                if (totalNeeded > names.length) {
+                    showStatus(`담당자가 ${totalNeeded - names.length}명 부족합니다!`, 'error');
+                } else {
+                    showStatus(`담당자가 ${names.length - totalNeeded}명 초과입니다!`, 'error');
+                }
+                return null;
             }
 
-            // 결과 표시
-            displayResults(assignments);
-            showStatus(`총 ${assignments.length}개 구역이 ${names.length}명에게 배정되었습니다!`, 'success');
+            // 제외 설정을 고려한 배정 (최대 100번 시도)
+            const maxAttempts = 100;
+            for (let attempt = 0; attempt < maxAttempts; attempt++) {
+                const shuffledNames = [...names].sort(() => Math.random() - 0.5);
+                const assignments = [];
+                let nameIndex = 0;
+                let valid = true;
+
+                for (const zone of zones) {
+                    const zoneAssignments = [];
+                    
+                    for (let i = 0; i < zone.count; i++) {
+                        if (nameIndex >= shuffledNames.length) {
+                            valid = false;
+                            break;
+                        }
+
+                        const person = shuffledNames[nameIndex];
+                        
+                        // 구역 제외 검사
+                        if (exclusionSettings.zoneExclusions[person] && 
+                            exclusionSettings.zoneExclusions[person].includes(zone.name)) {
+                            valid = false;
+                            break;
+                        }
+
+                        // 매칭 제한 검사 (같은 구역의 다른 사람들과 체크)
+                        let excluded = false;
+                        for (const existingPerson of zoneAssignments) {
+                            if ((exclusionSettings.pairExclusions[person] && 
+                                 exclusionSettings.pairExclusions[person].includes(existingPerson)) ||
+                                (exclusionSettings.pairExclusions[existingPerson] && 
+                                 exclusionSettings.pairExclusions[existingPerson].includes(person))) {
+                                excluded = true;
+                                break;
+                            }
+                        }
+
+                        if (excluded) {
+                            valid = false;
+                            break;
+                        }
+
+                        zoneAssignments.push(person);
+                        nameIndex++;
+                    }
+
+                    if (!valid) break;
+
+                    // 각 구역별로 배정된 사람들을 assignments에 추가
+                    assignments.push({
+                        zone: zone.name,
+                        people: zoneAssignments,
+                        count: zone.count
+                    });
+                }
+
+                if (valid) {
+                    return assignments;
+                }
+            }
+
+            showStatus('설정된 제한사항으로 인해 배정이 불가능합니다. 제외 설정을 확인해주세요.', 'error');
+            return null;
         }
 
         // 결과 표시
@@ -482,9 +746,10 @@
             assignments.forEach(assignment => {
                 const item = document.createElement('div');
                 item.className = 'assignment-item';
+                const peopleText = assignment.people.join(', ');
                 item.innerHTML = `
-                    <span class="person-name">${assignment.person}</span>
-                    <span class="zone-name">${assignment.zone}</span>
+                    <span class="person-name">${peopleText}</span>
+                    <span class="zone-name">${assignment.zone} (${assignment.count}명)</span>
                 `;
                 assignmentsDiv.appendChild(item);
             });
@@ -508,40 +773,14 @@
             }, 3000);
         }
 
-        // 결과 내보내기
-        function exportResults() {
-            const lastAssignment = localStorage.getItem('lastAssignment');
-            if (!lastAssignment) {
-                showStatus('내보낼 배정 결과가 없습니다!', 'error');
-                return;
-            }
 
-            const data = JSON.parse(lastAssignment);
-            let exportText = '청소구역 배정 결과\n';
-            exportText += '==================\n';
-            exportText += `배정 일시: ${new Date(data.date).toLocaleString('ko-KR')}\n\n`;
-            
-            data.assignments.forEach((assignment, index) => {
-                exportText += `${index + 1}. ${assignment.person} → ${assignment.zone}\n`;
-            });
-
-            // 다운로드
-            const blob = new Blob([exportText], { type: 'text/plain;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `청소구역배정_${new Date().toISOString().split('T')[0]}.txt`;
-            a.click();
-            URL.revokeObjectURL(url);
-
-            showStatus('결과를 파일로 내보냈습니다!', 'success');
-        }
 
         // 전체 데이터 내보내기 (JSON 파일로 백업)
         function exportAllData() {
             const allData = {
                 cleaningAssignData: localStorage.getItem('cleaningAssignData'),
                 lastAssignment: localStorage.getItem('lastAssignment'),
+                exclusionSettings: localStorage.getItem('exclusionSettings'),
                 exportDate: new Date().toISOString()
             };
             
@@ -571,6 +810,7 @@
                 try {
                     const importedData = JSON.parse(e.target.result);
                     
+                    // 기본 데이터 복원
                     if (importedData.cleaningAssignData) {
                         localStorage.setItem('cleaningAssignData', importedData.cleaningAssignData);
                     }
@@ -578,7 +818,14 @@
                         localStorage.setItem('lastAssignment', importedData.lastAssignment);
                     }
                     
-                    loadData(); // 화면에 반영
+                    // 제외 설정 복원
+                    if (importedData.exclusionSettings) {
+                        localStorage.setItem('exclusionSettings', importedData.exclusionSettings);
+                        loadExclusionSettings(); // 메모리에도 로드
+                    }
+                    
+                    // 화면에 반영
+                    autoLoadData();
                     showStatus('데이터를 성공적으로 가져왔습니다!', 'success');
                 } catch (error) {
                     showStatus('파일을 읽는 중 오류가 발생했습니다.', 'error');
@@ -609,7 +856,7 @@
             pairExclusions: {}   // 매칭 제한: {담당자: [제외담당자들]}
         };
 
-        // F1, F2, F3 키 이벤트 처리
+        // F1, F2, F3, F4 키 이벤트 처리
         document.addEventListener('keydown', function(event) {
             if (event.key === 'F1') {
                 event.preventDefault();
@@ -620,6 +867,9 @@
             } else if (event.key === 'F3') {
                 event.preventDefault();
                 showCurrentExclusions();
+            } else if (event.key === 'F4') {
+                event.preventDefault();
+                openDeleteExclusionModal();
             }
         });
 
@@ -813,6 +1063,108 @@
             alert(message);
         }
 
+        // 설정 삭제 모달 열기 (F4)
+        function openDeleteExclusionModal() {
+            if (Object.keys(exclusionSettings.zoneExclusions).length === 0 && 
+                Object.keys(exclusionSettings.pairExclusions).length === 0) {
+                showStatus('삭제할 제한사항이 없습니다.', 'error');
+                return;
+            }
+            
+            updateDeleteExclusionModal();
+            document.getElementById('deleteExclusionModal').style.display = 'block';
+        }
+
+        // 삭제 모달 업데이트
+        function updateDeleteExclusionModal() {
+            const deleteList = document.getElementById('deleteExclusionList');
+            deleteList.innerHTML = '';
+            
+            // 구역 제외 설정 표시
+            if (Object.keys(exclusionSettings.zoneExclusions).length > 0) {
+                deleteList.innerHTML += '<div style="font-weight: bold; margin: 10px 0; color: #4CAF50;">🚫 구역 배정 제외:</div>';
+                
+                for (const [person, zones] of Object.entries(exclusionSettings.zoneExclusions)) {
+                    if (zones && zones.length > 0) {
+                        deleteList.innerHTML += `
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="delete_zone_${person}" value="zone:${person}">
+                                <label for="delete_zone_${person}">${person} → ${zones.join(', ')}</label>
+                            </div>
+                        `;
+                    }
+                }
+            }
+            
+            // 매칭 제한 설정 표시
+            if (Object.keys(exclusionSettings.pairExclusions).length > 0) {
+                deleteList.innerHTML += '<div style="font-weight: bold; margin: 10px 0; color: #4CAF50;">👥 매칭 제한:</div>';
+                
+                for (const [person, pairs] of Object.entries(exclusionSettings.pairExclusions)) {
+                    if (pairs && pairs.length > 0) {
+                        deleteList.innerHTML += `
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="delete_pair_${person}" value="pair:${person}">
+                                <label for="delete_pair_${person}">${person} ↔ ${pairs.join(', ')}</label>
+                            </div>
+                        `;
+                    }
+                }
+            }
+        }
+
+        // 전체 선택
+        function selectAllForDelete() {
+            document.querySelectorAll('#deleteExclusionList input[type="checkbox"]').forEach(checkbox => {
+                checkbox.checked = true;
+            });
+        }
+
+        // 전체 해제
+        function deselectAllForDelete() {
+            document.querySelectorAll('#deleteExclusionList input[type="checkbox"]').forEach(checkbox => {
+                checkbox.checked = false;
+            });
+        }
+
+        // 선택된 설정 삭제
+        function deleteSelectedExclusions() {
+            const selectedCheckboxes = document.querySelectorAll('#deleteExclusionList input[type="checkbox"]:checked');
+            
+            if (selectedCheckboxes.length === 0) {
+                showStatus('삭제할 항목을 선택해주세요!', 'error');
+                return;
+            }
+            
+            // 확인 대화상자
+            const confirmMessage = `선택한 ${selectedCheckboxes.length}개의 제한사항을 삭제하시겠습니까?`;
+            if (!confirm(confirmMessage)) {
+                return;
+            }
+            
+            let deletedCount = 0;
+            
+            selectedCheckboxes.forEach(checkbox => {
+                const [type, person] = checkbox.value.split(':');
+                
+                if (type === 'zone' && exclusionSettings.zoneExclusions[person]) {
+                    delete exclusionSettings.zoneExclusions[person];
+                    deletedCount++;
+                } else if (type === 'pair' && exclusionSettings.pairExclusions[person]) {
+                    delete exclusionSettings.pairExclusions[person];
+                    deletedCount++;
+                }
+            });
+            
+            if (deletedCount > 0) {
+                saveExclusionSettings();
+                showStatus(`${deletedCount}개의 제한사항이 삭제되었습니다.`, 'success');
+                closeModal('deleteExclusionModal');
+            } else {
+                showStatus('삭제할 수 있는 항목이 없습니다.', 'error');
+            }
+        }
+
         // 제외 설정 저장/불러오기
         function saveExclusionSettings() {
             localStorage.setItem('exclusionSettings', JSON.stringify(exclusionSettings));
@@ -833,24 +1185,32 @@
 
         function getZonesList() {
             const zonesText = document.getElementById('zones').value.trim();
-            return zonesText ? zonesText.split('\n').map(zone => zone.trim()).filter(zone => zone) : [];
+            if (!zonesText) return [];
+            
+            return zonesText.split('\n')
+                .map(line => line.trim())
+                .filter(line => line)
+                .map(line => {
+                    const [zoneName] = line.split(':').map(s => s.trim());
+                    return zoneName;
+                })
+                .filter(zoneName => zoneName);
         }
 
         // 페이지 로드 시 저장된 데이터 자동 불러오기
         window.onload = function() {
-            const saved = localStorage.getItem('cleaningAssignData');
-            if (saved) {
-                loadData();
-            }
+            // 자동 데이터 불러오기
+            autoLoadData();
             
             // 제외 설정 불러오기
             loadExclusionSettings();
             
-            // 기본 샘플 데이터 설정
-            if (!document.getElementById('names').value) {
-                document.getElementById('names').value = '김철수\n이영희\n박민수\n최지혜\n정우성\n한지민';
-                document.getElementById('zones').value = '1층 복도\n2층 복도\n화장실\n계단\n교실 1\n교실 2\n컴퓨터실\n도서관';
-            }
+
+
+            // 입력값 변경 시 자동 저장
+            ['names', 'zones', 'exclusions', 'webhook'].forEach(id => {
+                document.getElementById(id).addEventListener('input', autoSaveData);
+            });
         };
     </script>
 </body>
