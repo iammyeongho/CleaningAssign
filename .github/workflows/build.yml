@@ -51,16 +51,16 @@ jobs:
     - name: Build macOS Intel executable
       run: pyinstaller mac.spec --clean --noconfirm
     
-    - name: Create macOS Intel app bundle zip
+    - name: Create macOS Intel zip
       run: |
         cd dist
-        zip -r CleaningAssign-Intel.app.zip CleaningAssign.app
+        zip CleaningAssign-Intel-mac.zip CleaningAssign_mac
     
     - name: Upload macOS Intel artifact
       uses: actions/upload-artifact@v4
       with:
         name: CleaningAssign-macOS-Intel
-        path: dist/CleaningAssign-Intel.app.zip
+        path: dist/CleaningAssign-Intel-mac.zip
 
   build-macos-arm:
     runs-on: macos-14  # Apple Silicon 맥
@@ -81,13 +81,13 @@ jobs:
     - name: Build macOS ARM executable
       run: pyinstaller mac.spec --clean --noconfirm
     
-    - name: Create macOS ARM app bundle zip
+    - name: Create macOS ARM zip
       run: |
         cd dist
-        zip -r CleaningAssign-ARM.app.zip CleaningAssign.app
+        zip CleaningAssign-ARM-mac.zip CleaningAssign_mac
     
     - name: Upload macOS ARM artifact
       uses: actions/upload-artifact@v4
       with:
         name: CleaningAssign-macOS-ARM
-        path: dist/CleaningAssign-ARM.app.zip
+        path: dist/CleaningAssign-ARM-mac.zip
