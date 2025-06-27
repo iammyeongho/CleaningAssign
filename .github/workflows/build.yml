@@ -60,8 +60,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: CleaningAssign-macOS
-<<<<<<< HEAD
-        path: dist/CleaningAssign.app.zip 
-=======
-        path: dist/CleaningAssign_mac
->>>>>>> 6cfb4c1d04f9fd707449d6692aa6cc16cf26345a
+        path: dist/CleaningAssign.app.zip
