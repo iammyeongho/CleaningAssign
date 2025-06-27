@@ -148,6 +148,121 @@
             border: 1px solid #f5c6cb;
         }
 
+        /* 모달 스타일 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 80%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 15px;
+        }
+
+        .modal-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .close {
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #999;
+            transition: color 0.3s;
+        }
+
+        .close:hover {
+            color: #333;
+        }
+
+        .modal-section {
+            margin: 20px 0;
+        }
+
+        .modal-section h3 {
+            margin-bottom: 10px;
+            color: #4CAF50;
+            font-size: 1.1em;
+        }
+
+        .checkbox-list {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            background: #f8f9fa;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            margin: 8px 0;
+            padding: 8px;
+            border-radius: 5px;
+            transition: background-color 0.2s;
+        }
+
+        .checkbox-item:hover {
+            background-color: #e9ecef;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+            gap: 10px;
+        }
+
+        .current-settings {
+            background: #e8f5e8;
+            border: 1px solid #4CAF50;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            font-size: 14px;
+        }
+
+        .shortcut-info {
+            text-align: center;
+            margin: 15px 0;
+            padding: 10px;
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #856404;
+        }
+
         @media (max-width: 768px) {
             .container {
                 margin: 10px;
@@ -189,12 +304,22 @@
                 </div>
             </div>
             
+            <div class="shortcut-info">
+                💡 <strong>단축키:</strong> F1 - 구역 배정 제외 설정 | F2 - 매칭 제한 설정 | F3 - 현재 설정 확인
+            </div>
+            
             <div class="controls">
                 <button onclick="assignZones()">🎲 구역 배정하기</button>
                 <button onclick="saveData()">💾 데이터 저장</button>
                 <button onclick="loadData()">📂 데이터 불러오기</button>
+                <button onclick="openZoneExclusionModal()">🚫 구역 제외 설정 (F1)</button>
+                <button onclick="openPairExclusionModal()">👥 매칭 제한 설정 (F2)</button>
+                <button onclick="showCurrentExclusions()">📋 현재 설정 확인 (F3)</button>
                 <button onclick="exportResults()">📄 결과 내보내기</button>
+                <button onclick="exportAllData()">💾 전체 데이터 내보내기</button>
+                <button onclick="importData()">📁 데이터 가져오기</button>
                 <button onclick="clearAll()">🗑️ 전체 삭제</button>
+                <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="handleFileImport(event)">
             </div>
             
             <div id="status"></div>
@@ -205,6 +330,72 @@
                 <div style="text-align: center; margin-top: 20px;">
                     <small>배정 일시: <span id="assignmentDate"></span></small>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 구역 제외 설정 모달 -->
+    <div id="zoneExclusionModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">🚫 구역 배정 제외 설정</h2>
+                <span class="close" onclick="closeModal('zoneExclusionModal')">&times;</span>
+            </div>
+            
+            <div class="modal-section">
+                <h3>담당자 선택</h3>
+                <select id="zoneExclusionPerson">
+                    <option value="">담당자를 선택하세요</option>
+                </select>
+            </div>
+            
+            <div class="modal-section">
+                <h3>제외할 구역 선택</h3>
+                <div id="zoneExclusionList" class="checkbox-list">
+                    <!-- 동적으로 생성됨 -->
+                </div>
+            </div>
+            
+            <div class="current-settings" id="currentZoneExclusions">
+                현재 설정된 제외 구역이 없습니다.
+            </div>
+            
+            <div class="modal-buttons">
+                <button onclick="saveZoneExclusions()">💾 설정 저장</button>
+                <button onclick="closeModal('zoneExclusionModal')">❌ 취소</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 매칭 제한 설정 모달 -->
+    <div id="pairExclusionModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">👥 매칭 제한 설정</h2>
+                <span class="close" onclick="closeModal('pairExclusionModal')">&times;</span>
+            </div>
+            
+            <div class="modal-section">
+                <h3>기준 담당자</h3>
+                <select id="pairExclusionPerson1">
+                    <option value="">기준 담당자를 선택하세요</option>
+                </select>
+            </div>
+            
+            <div class="modal-section">
+                <h3>매칭 제외할 담당자들</h3>
+                <div id="pairExclusionList" class="checkbox-list">
+                    <!-- 동적으로 생성됨 -->
+                </div>
+            </div>
+            
+            <div class="current-settings" id="currentPairExclusions">
+                현재 설정된 매칭 제한이 없습니다.
+            </div>
+            
+            <div class="modal-buttons">
+                <button onclick="savePairExclusions()">💾 설정 저장</button>
+                <button onclick="closeModal('pairExclusionModal')">❌ 취소</button>
             </div>
         </div>
     </div>
@@ -346,6 +537,59 @@
             showStatus('결과를 파일로 내보냈습니다!', 'success');
         }
 
+        // 전체 데이터 내보내기 (JSON 파일로 백업)
+        function exportAllData() {
+            const allData = {
+                cleaningAssignData: localStorage.getItem('cleaningAssignData'),
+                lastAssignment: localStorage.getItem('lastAssignment'),
+                exportDate: new Date().toISOString()
+            };
+            
+            const blob = new Blob([JSON.stringify(allData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `청소배정_백업_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            showStatus('전체 데이터를 JSON 파일로 내보냈습니다!', 'success');
+        }
+
+        // 데이터 가져오기
+        function importData() {
+            document.getElementById('fileInput').click();
+        }
+
+        // 파일 import 처리
+        function handleFileImport(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importedData = JSON.parse(e.target.result);
+                    
+                    if (importedData.cleaningAssignData) {
+                        localStorage.setItem('cleaningAssignData', importedData.cleaningAssignData);
+                    }
+                    if (importedData.lastAssignment) {
+                        localStorage.setItem('lastAssignment', importedData.lastAssignment);
+                    }
+                    
+                    loadData(); // 화면에 반영
+                    showStatus('데이터를 성공적으로 가져왔습니다!', 'success');
+                } catch (error) {
+                    showStatus('파일을 읽는 중 오류가 발생했습니다.', 'error');
+                }
+            };
+            reader.readAsText(file);
+            
+            // 파일 input 초기화
+            event.target.value = '';
+        }
+
         // 전체 삭제
         function clearAll() {
             if (confirm('모든 데이터를 삭제하시겠습니까?')) {
@@ -359,12 +603,248 @@
             }
         }
 
+        // 제외 설정 저장소
+        let exclusionSettings = {
+            zoneExclusions: {},  // 구역 배정 제외: {담당자: [제외구역들]}
+            pairExclusions: {}   // 매칭 제한: {담당자: [제외담당자들]}
+        };
+
+        // F1, F2, F3 키 이벤트 처리
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'F1') {
+                event.preventDefault();
+                openZoneExclusionModal();
+            } else if (event.key === 'F2') {
+                event.preventDefault();
+                openPairExclusionModal();
+            } else if (event.key === 'F3') {
+                event.preventDefault();
+                showCurrentExclusions();
+            }
+        });
+
+        // 모달 열기/닫기
+        function openZoneExclusionModal() {
+            updateZoneExclusionModal();
+            document.getElementById('zoneExclusionModal').style.display = 'block';
+        }
+
+        function openPairExclusionModal() {
+            updatePairExclusionModal();
+            document.getElementById('pairExclusionModal').style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // 모달 외부 클릭 시 닫기
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+
+        // 구역 제외 모달 업데이트
+        function updateZoneExclusionModal() {
+            const names = getNamesList();
+            const zones = getZonesList();
+            
+            // 담당자 선택 업데이트
+            const personSelect = document.getElementById('zoneExclusionPerson');
+            personSelect.innerHTML = '<option value="">담당자를 선택하세요</option>';
+            names.forEach(name => {
+                personSelect.innerHTML += `<option value="${name}">${name}</option>`;
+            });
+            
+            // 구역 체크박스 업데이트
+            const zoneList = document.getElementById('zoneExclusionList');
+            zoneList.innerHTML = '';
+            zones.forEach(zone => {
+                zoneList.innerHTML += `
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="zone_${zone}" value="${zone}">
+                        <label for="zone_${zone}">${zone}</label>
+                    </div>
+                `;
+            });
+            
+            // 선택 변경 시 이벤트 추가
+            personSelect.onchange = updateZoneExclusionDisplay;
+            zoneList.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                checkbox.onchange = updateZoneExclusionDisplay;
+            });
+        }
+
+        // 매칭 제한 모달 업데이트
+        function updatePairExclusionModal() {
+            const names = getNamesList();
+            
+            // 기준 담당자 선택 업데이트
+            const person1Select = document.getElementById('pairExclusionPerson1');
+            person1Select.innerHTML = '<option value="">기준 담당자를 선택하세요</option>';
+            names.forEach(name => {
+                person1Select.innerHTML += `<option value="${name}">${name}</option>`;
+            });
+            
+            // 제외 담당자 체크박스 업데이트
+            const pairList = document.getElementById('pairExclusionList');
+            pairList.innerHTML = '';
+            names.forEach(name => {
+                pairList.innerHTML += `
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="pair_${name}" value="${name}">
+                        <label for="pair_${name}">${name}</label>
+                    </div>
+                `;
+            });
+            
+            // 선택 변경 시 이벤트 추가
+            person1Select.onchange = updatePairExclusionDisplay;
+            pairList.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                checkbox.onchange = updatePairExclusionDisplay;
+            });
+        }
+
+        // 구역 제외 표시 업데이트
+        function updateZoneExclusionDisplay() {
+            const person = document.getElementById('zoneExclusionPerson').value;
+            const selectedZones = Array.from(document.querySelectorAll('#zoneExclusionList input[type="checkbox"]:checked'))
+                .map(cb => cb.value);
+            
+            const currentDiv = document.getElementById('currentZoneExclusions');
+            
+            if (person && selectedZones.length > 0) {
+                currentDiv.innerHTML = `<strong>${person}</strong>의 제외 구역:<br>${selectedZones.join(', ')}`;
+            } else if (person && exclusionSettings.zoneExclusions[person]) {
+                currentDiv.innerHTML = `<strong>${person}</strong>의 현재 제외 구역:<br>${exclusionSettings.zoneExclusions[person].join(', ')}`;
+            } else {
+                currentDiv.innerHTML = '현재 설정된 제외 구역이 없습니다.';
+            }
+        }
+
+        // 매칭 제한 표시 업데이트
+        function updatePairExclusionDisplay() {
+            const person1 = document.getElementById('pairExclusionPerson1').value;
+            const selectedPairs = Array.from(document.querySelectorAll('#pairExclusionList input[type="checkbox"]:checked'))
+                .map(cb => cb.value);
+            
+            const currentDiv = document.getElementById('currentPairExclusions');
+            
+            if (person1 && selectedPairs.length > 0) {
+                currentDiv.innerHTML = `<strong>${person1}</strong>의 매칭 제한:<br>${selectedPairs.join(', ')}`;
+            } else if (person1 && exclusionSettings.pairExclusions[person1]) {
+                currentDiv.innerHTML = `<strong>${person1}</strong>의 현재 매칭 제한:<br>${exclusionSettings.pairExclusions[person1].join(', ')}`;
+            } else {
+                currentDiv.innerHTML = '현재 설정된 매칭 제한이 없습니다.';
+            }
+        }
+
+        // 구역 제외 설정 저장
+        function saveZoneExclusions() {
+            const person = document.getElementById('zoneExclusionPerson').value;
+            const selectedZones = Array.from(document.querySelectorAll('#zoneExclusionList input[type="checkbox"]:checked'))
+                .map(cb => cb.value);
+            
+            if (!person) {
+                showStatus('담당자를 선택해주세요!', 'error');
+                return;
+            }
+            
+            if (selectedZones.length === 0) {
+                delete exclusionSettings.zoneExclusions[person];
+                showStatus(`${person}의 모든 구역 제외 설정이 해제되었습니다.`, 'success');
+            } else {
+                exclusionSettings.zoneExclusions[person] = selectedZones;
+                showStatus(`${person}의 구역 제외 설정이 저장되었습니다.`, 'success');
+            }
+            
+            saveExclusionSettings();
+            closeModal('zoneExclusionModal');
+        }
+
+        // 매칭 제한 설정 저장
+        function savePairExclusions() {
+            const person1 = document.getElementById('pairExclusionPerson1').value;
+            const selectedPairs = Array.from(document.querySelectorAll('#pairExclusionList input[type="checkbox"]:checked'))
+                .map(cb => cb.value);
+            
+            if (!person1) {
+                showStatus('기준 담당자를 선택해주세요!', 'error');
+                return;
+            }
+            
+            if (selectedPairs.length === 0) {
+                delete exclusionSettings.pairExclusions[person1];
+                showStatus(`${person1}의 모든 매칭 제한이 해제되었습니다.`, 'success');
+            } else {
+                exclusionSettings.pairExclusions[person1] = selectedPairs;
+                showStatus(`${person1}의 매칭 제한이 저장되었습니다.`, 'success');
+            }
+            
+            saveExclusionSettings();
+            closeModal('pairExclusionModal');
+        }
+
+        // 현재 설정 확인 (F3)
+        function showCurrentExclusions() {
+            let message = '🔍 현재 설정된 제한사항:\n\n';
+            
+            if (Object.keys(exclusionSettings.zoneExclusions).length > 0) {
+                message += '🚫 구역 배정 제외:\n';
+                for (const [person, zones] of Object.entries(exclusionSettings.zoneExclusions)) {
+                    message += `• ${person}: ${zones.join(', ')}\n`;
+                }
+                message += '\n';
+            }
+            
+            if (Object.keys(exclusionSettings.pairExclusions).length > 0) {
+                message += '👥 매칭 제한:\n';
+                for (const [person, pairs] of Object.entries(exclusionSettings.pairExclusions)) {
+                    message += `• ${person} ↔ ${pairs.join(', ')}\n`;
+                }
+            }
+            
+            if (Object.keys(exclusionSettings.zoneExclusions).length === 0 && 
+                Object.keys(exclusionSettings.pairExclusions).length === 0) {
+                message += '설정된 제한사항이 없습니다.';
+            }
+            
+            alert(message);
+        }
+
+        // 제외 설정 저장/불러오기
+        function saveExclusionSettings() {
+            localStorage.setItem('exclusionSettings', JSON.stringify(exclusionSettings));
+        }
+
+        function loadExclusionSettings() {
+            const saved = localStorage.getItem('exclusionSettings');
+            if (saved) {
+                exclusionSettings = JSON.parse(saved);
+            }
+        }
+
+        // 유틸리티 함수들
+        function getNamesList() {
+            const namesText = document.getElementById('names').value.trim();
+            return namesText ? namesText.split('\n').map(name => name.trim()).filter(name => name) : [];
+        }
+
+        function getZonesList() {
+            const zonesText = document.getElementById('zones').value.trim();
+            return zonesText ? zonesText.split('\n').map(zone => zone.trim()).filter(zone => zone) : [];
+        }
+
         // 페이지 로드 시 저장된 데이터 자동 불러오기
         window.onload = function() {
             const saved = localStorage.getItem('cleaningAssignData');
             if (saved) {
                 loadData();
             }
+            
+            // 제외 설정 불러오기
+            loadExclusionSettings();
             
             // 기본 샘플 데이터 설정
             if (!document.getElementById('names').value) {
