@@ -51,4 +51,16 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
+)
+
+# 맥용 앱 번들 생성
+app = BUNDLE(
+    exe,
+    name='CleaningAssign.app',
+    icon=None,
+    bundle_identifier='com.cleaningassign.app',
+    info_plist={
+        'NSHighResolutionCapable': 'True',
+        'LSUIElement': '0',
+    },
 ) 
