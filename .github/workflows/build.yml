@@ -11,12 +11,12 @@ jobs:
     runs-on: windows-latest
     
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     
     - name: Set up Python
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v4
       with:
-        python-version: '3.12'
+        python-version: '3.11'
     
     - name: Install dependencies
       run: |
@@ -27,7 +27,7 @@ jobs:
       run: pyinstaller windows.spec --clean --noconfirm
     
     - name: Upload Windows artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: CleaningAssign-Windows
         path: dist/CleaningAssign_windows.exe
@@ -36,12 +36,12 @@ jobs:
     runs-on: macos-latest
     
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     
     - name: Set up Python
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v4
       with:
-        python-version: '3.12'
+        python-version: '3.11'
     
     - name: Install dependencies
       run: |
@@ -52,7 +52,7 @@ jobs:
       run: pyinstaller mac.spec --clean --noconfirm
     
     - name: Upload macOS artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: CleaningAssign-macOS
-        path: dist/CleaningAssign_mac 
+        path: dist/CleaningAssign_mac
