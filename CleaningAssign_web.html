@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>청소구역 배정 시스템</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .input-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
+        button {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 5px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .results {
+            background: #fff;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+
+        .assignment-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            margin: 10px 0;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 10px;
+            border-left: 5px solid #4CAF50;
+        }
+
+        .person-name {
+            font-weight: bold;
+            color: #333;
+            font-size: 18px;
+        }
+
+        .zone-name {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .status {
+            text-align: center;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧹 청소구역 배정 시스템</h1>
+            <p>공정하고 효율적인 청소구역 배정을 위한 웹 앱</p>
+        </div>
+        
+        <div class="content">
+            <div class="input-section">
+                <div class="input-group">
+                    <label for="names">참여자 명단 (한 줄에 한 명씩)</label>
+                    <textarea id="names" rows="6" placeholder="김철수&#10;이영희&#10;박민수&#10;최지혜"></textarea>
+                </div>
+                
+                <div class="input-group">
+                    <label for="zones">청소구역 (한 줄에 하나씩)</label>
+                    <textarea id="zones" rows="6" placeholder="1층 복도&#10;2층 복도&#10;화장실&#10;계단&#10;교실 1&#10;교실 2"></textarea>
+                </div>
+                
+                <div class="input-group">
+                    <label for="exclusions">배정 제외자 (선택사항)</label>
+                    <input type="text" id="exclusions" placeholder="제외할 사람 이름 (쉼표로 구분)">
+                </div>
+            </div>
+            
+            <div class="controls">
+                <button onclick="assignZones()">🎲 구역 배정하기</button>
+                <button onclick="saveData()">💾 데이터 저장</button>
+                <button onclick="loadData()">📂 데이터 불러오기</button>
+                <button onclick="exportResults()">📄 결과 내보내기</button>
+                <button onclick="clearAll()">🗑️ 전체 삭제</button>
+            </div>
+            
+            <div id="status"></div>
+            
+            <div id="results" class="results" style="display: none;">
+                <h2>📋 배정 결과</h2>
+                <div id="assignments"></div>
+                <div style="text-align: center; margin-top: 20px;">
+                    <small>배정 일시: <span id="assignmentDate"></span></small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 데이터 저장/불러오기
+        function saveData() {
+            const data = {
+                names: document.getElementById('names').value,
+                zones: document.getElementById('zones').value,
+                exclusions: document.getElementById('exclusions').value
+            };
+            localStorage.setItem('cleaningAssignData', JSON.stringify(data));
+            showStatus('데이터가 저장되었습니다!', 'success');
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('cleaningAssignData');
+            if (saved) {
+                const data = JSON.parse(saved);
+                document.getElementById('names').value = data.names || '';
+                document.getElementById('zones').value = data.zones || '';
+                document.getElementById('exclusions').value = data.exclusions || '';
+                showStatus('데이터를 불러왔습니다!', 'success');
+            } else {
+                showStatus('저장된 데이터가 없습니다.', 'error');
+            }
+        }
+
+        // 구역 배정 함수
+        function assignZones() {
+            const namesText = document.getElementById('names').value.trim();
+            const zonesText = document.getElementById('zones').value.trim();
+            const exclusionsText = document.getElementById('exclusions').value.trim();
+
+            if (!namesText || !zonesText) {
+                showStatus('참여자 명단과 청소구역을 모두 입력해주세요!', 'error');
+                return;
+            }
+
+            // 데이터 파싱
+            let names = namesText.split('\n').filter(name => name.trim());
+            const zones = zonesText.split('\n').filter(zone => zone.trim());
+            const exclusions = exclusionsText ? exclusionsText.split(',').map(name => name.trim()) : [];
+
+            // 제외자 처리
+            names = names.filter(name => !exclusions.includes(name.trim()));
+
+            if (names.length === 0) {
+                showStatus('배정 가능한 참여자가 없습니다!', 'error');
+                return;
+            }
+
+            if (zones.length === 0) {
+                showStatus('청소구역을 입력해주세요!', 'error');
+                return;
+            }
+
+            // 랜덤 배정
+            const shuffledNames = [...names].sort(() => Math.random() - 0.5);
+            const assignments = [];
+
+            for (let i = 0; i < zones.length; i++) {
+                const assignedPerson = shuffledNames[i % shuffledNames.length];
+                assignments.push({
+                    person: assignedPerson,
+                    zone: zones[i]
+                });
+            }
+
+            // 결과 표시
+            displayResults(assignments);
+            showStatus(`총 ${assignments.length}개 구역이 ${names.length}명에게 배정되었습니다!`, 'success');
+        }
+
+        // 결과 표시
+        function displayResults(assignments) {
+            const resultsDiv = document.getElementById('results');
+            const assignmentsDiv = document.getElementById('assignments');
+            const dateSpan = document.getElementById('assignmentDate');
+
+            assignmentsDiv.innerHTML = '';
+            
+            assignments.forEach(assignment => {
+                const item = document.createElement('div');
+                item.className = 'assignment-item';
+                item.innerHTML = `
+                    <span class="person-name">${assignment.person}</span>
+                    <span class="zone-name">${assignment.zone}</span>
+                `;
+                assignmentsDiv.appendChild(item);
+            });
+
+            dateSpan.textContent = new Date().toLocaleString('ko-KR');
+            resultsDiv.style.display = 'block';
+            
+            // 결과 저장
+            localStorage.setItem('lastAssignment', JSON.stringify({
+                assignments: assignments,
+                date: new Date().toISOString()
+            }));
+        }
+
+        // 상태 메시지 표시
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.innerHTML = `<div class="status ${type}">${message}</div>`;
+            setTimeout(() => {
+                statusDiv.innerHTML = '';
+            }, 3000);
+        }
+
+        // 결과 내보내기
+        function exportResults() {
+            const lastAssignment = localStorage.getItem('lastAssignment');
+            if (!lastAssignment) {
+                showStatus('내보낼 배정 결과가 없습니다!', 'error');
+                return;
+            }
+
+            const data = JSON.parse(lastAssignment);
+            let exportText = '청소구역 배정 결과\n';
+            exportText += '==================\n';
+            exportText += `배정 일시: ${new Date(data.date).toLocaleString('ko-KR')}\n\n`;
+            
+            data.assignments.forEach((assignment, index) => {
+                exportText += `${index + 1}. ${assignment.person} → ${assignment.zone}\n`;
+            });
+
+            // 다운로드
+            const blob = new Blob([exportText], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `청소구역배정_${new Date().toISOString().split('T')[0]}.txt`;
+            a.click();
+            URL.revokeObjectURL(url);
+
+            showStatus('결과를 파일로 내보냈습니다!', 'success');
+        }
+
+        // 전체 삭제
+        function clearAll() {
+            if (confirm('모든 데이터를 삭제하시겠습니까?')) {
+                document.getElementById('names').value = '';
+                document.getElementById('zones').value = '';
+                document.getElementById('exclusions').value = '';
+                document.getElementById('results').style.display = 'none';
+                localStorage.removeItem('cleaningAssignData');
+                localStorage.removeItem('lastAssignment');
+                showStatus('모든 데이터가 삭제되었습니다.', 'success');
+            }
+        }
+
+        // 페이지 로드 시 저장된 데이터 자동 불러오기
+        window.onload = function() {
+            const saved = localStorage.getItem('cleaningAssignData');
+            if (saved) {
+                loadData();
+            }
+            
+            // 기본 샘플 데이터 설정
+            if (!document.getElementById('names').value) {
+                document.getElementById('names').value = '김철수\n이영희\n박민수\n최지혜\n정우성\n한지민';
+                document.getElementById('zones').value = '1층 복도\n2층 복도\n화장실\n계단\n교실 1\n교실 2\n컴퓨터실\n도서관';
+            }
+        };
+    </script>
+</body>
+</html> 
