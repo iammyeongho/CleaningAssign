@@ -32,8 +32,8 @@ jobs:
         name: CleaningAssign-Windows
         path: dist/CleaningAssign_windows.exe
 
-  build-macos:
-    runs-on: macos-latest
+  build-macos-intel:
+    runs-on: macos-13  # Intel 맥
     
     steps:
     - uses: actions/checkout@v4
@@ -48,16 +48,46 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     
-    - name: Build macOS executable
+    - name: Build macOS Intel executable
       run: pyinstaller mac.spec --clean --noconfirm
     
-    - name: Create macOS app bundle zip
+    - name: Create macOS Intel app bundle zip
       run: |
         cd dist
-        zip -r CleaningAssign.app.zip CleaningAssign.app
+        zip -r CleaningAssign-Intel.app.zip CleaningAssign.app
     
-    - name: Upload macOS artifact
+    - name: Upload macOS Intel artifact
       uses: actions/upload-artifact@v4
       with:
-        name: CleaningAssign-macOS
-        path: dist/CleaningAssign.app.zip
+        name: CleaningAssign-macOS-Intel
+        path: dist/CleaningAssign-Intel.app.zip
+
+  build-macos-arm:
+    runs-on: macos-14  # Apple Silicon 맥
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Build macOS ARM executable
+      run: pyinstaller mac.spec --clean --noconfirm
+    
+    - name: Create macOS ARM app bundle zip
+      run: |
+        cd dist
+        zip -r CleaningAssign-ARM.app.zip CleaningAssign.app
+    
+    - name: Upload macOS ARM artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: CleaningAssign-macOS-ARM
+        path: dist/CleaningAssign-ARM.app.zip
